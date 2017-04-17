@@ -8,9 +8,7 @@ class PICC {
   cid: string;
   N: number;
   R: number;
-  cycle: number;
   connection: any;
-  messages: Array<any> = [];
   PCDres: any;
   log: Array<string> = [];
   state: string;
@@ -25,7 +23,6 @@ class PICC {
     this.name = name;
     this.afi = "0";
     this.cid = Math.floor((Math.random() * 100) + 1).toString();
-    this.cycle = 0;
     this.N = Math.floor((Math.random() * 5) + 1);
     this.R = 0;
     this.state = 'IDLE';
@@ -85,7 +82,6 @@ class PICC {
                  this.R = Math.floor((Math.random() * 5) + 1);
                  this.N = this.R;
                  this.log.push("R > 1 : so N become R and PICC wait for SLOT-MARKER");
-                 this.log.push("")
                  this.sendMessage('ATQB', {
                    "collision" : PICC.collision,
                    "messageReceive" : PICC.messageReceive,
@@ -125,9 +121,9 @@ class PICC {
 export class AppComponent implements OnInit, OnDestroy  {
   piccList : Array<PICC> = [];
 
-  constructor(public http : Http,  private chatService:SocketService){
+  constructor(public http : Http,  private socket:SocketService){
     for (var i = 0; i < 3; i++){
-      this.piccList[i] = new PICC("PICC : " + i, i, this.http, chatService);
+      this.piccList[i] = new PICC("PICC : " + i, i, this.http, socket);
     }
   }
 
